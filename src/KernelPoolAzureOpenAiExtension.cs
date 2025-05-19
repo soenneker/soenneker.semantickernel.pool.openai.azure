@@ -1,12 +1,13 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.SemanticKernel;
+﻿using Microsoft.SemanticKernel;
 using Soenneker.Dtos.HttpClientOptions;
 using Soenneker.Extensions.ValueTask;
 using Soenneker.SemanticKernel.Dtos.Options;
+using Soenneker.SemanticKernel.Pool.Abstract;
 using Soenneker.Utils.HttpClientCache.Abstract;
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Soenneker.SemanticKernel.Pool.OpenAi.Azure;
 
@@ -30,7 +31,7 @@ public static class KernelPoolAzureOpenAiExtension
     /// <param name="tokensPerDay">Optional maximum number of tokens allowed per day.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> representing the asynchronous registration operation.</returns>
-    public static ValueTask RegisterAzureOpenAi(this KernelPoolManager pool, string key, string modelId, string apiKey, string endpoint, IHttpClientCache httpClientCache, int? rps,
+    public static ValueTask RegisterAzureOpenAi(this IKernelPoolManager pool, string key, string modelId, string apiKey, string endpoint, IHttpClientCache httpClientCache, int? rps,
         int? rpm, int? rpd, int? tokensPerDay = null, CancellationToken cancellationToken = default)
     {
         var options = new SemanticKernelOptions
@@ -67,7 +68,7 @@ public static class KernelPoolAzureOpenAiExtension
     /// <param name="httpClientCache">The HTTP client cache to remove the associated client from.</param>
     /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> representing the asynchronous unregistration operation.</returns>
-    public static async ValueTask UnregisterAzureOpenAi(this KernelPoolManager pool, string key, IHttpClientCache httpClientCache, CancellationToken cancellationToken = default)
+    public static async ValueTask UnregisterAzureOpenAi(this IKernelPoolManager pool, string key, IHttpClientCache httpClientCache, CancellationToken cancellationToken = default)
     {
         await pool.Unregister(key, cancellationToken).NoSync();
         await httpClientCache.Remove($"azureopenai:{key}", cancellationToken).NoSync();
