@@ -45,6 +45,6 @@
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.56.0" />
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.Google" Version="1.51.0-alpha" />
         <PackageReference Include="Soenneker.SemanticKernel.Pool" Version="3.0.47" />
-        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.1708" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="3.0.1709" />
     </ItemGroup>
 </Project>
