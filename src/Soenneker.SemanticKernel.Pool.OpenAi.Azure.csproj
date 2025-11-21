@@ -42,7 +42,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureOpenAI" Version="1.67.1" />
-        <PackageReference Include="Soenneker.SemanticKernel.Pool" Version="4.0.151" />
+        <PackageReference Include="Soenneker.SemanticKernel.Pool" Version="4.0.152" />
         <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.1768" />
     </ItemGroup>
 </Project>
