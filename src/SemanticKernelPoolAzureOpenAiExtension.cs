@@ -35,7 +35,8 @@ public static class SemanticKernelPoolAzureOpenAiExtension
             TokensPerDay = tokensPerDay,
             KernelFactory = async (opts, _) =>
             {
-                HttpClient httpClient = await httpClientCache.Get($"azureopenai:{poolId}:{key}", () => new HttpClientOptions
+                // No closure: static lambda with no state needed
+                HttpClient httpClient = await httpClientCache.Get($"azureopenai:{poolId}:{key}", static () => new HttpClientOptions
                 {
                     Timeout = TimeSpan.FromSeconds(300)
                 }, cancellationToken).NoSync();
