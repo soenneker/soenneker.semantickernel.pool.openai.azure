@@ -4,10 +4,11 @@
   </Folder>
   <Folder Name="/.github/workflows/">
     <File Path=".github/workflows/build-and-test.yml" />
+    <File Path=".github/workflows/codeql.yml" />
     <File Path=".github/workflows/publish-package.yml" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/Soenneker.SemanticKernel.Pool.OpenAi.Azure.csproj" />
+    <Project Path="src/Soenneker.SemanticKernel.Pool.OpenAi.Azure/Soenneker.SemanticKernel.Pool.OpenAi.Azure.csproj" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Soenneker.SemanticKernel.Pool.OpenAi.Azure.Tests/Soenneker.SemanticKernel.Pool.OpenAi.Azure.Tests.csproj" />

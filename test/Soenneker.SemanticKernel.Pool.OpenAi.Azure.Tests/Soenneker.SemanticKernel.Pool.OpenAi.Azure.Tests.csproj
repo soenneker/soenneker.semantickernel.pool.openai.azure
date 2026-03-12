@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.SemanticKernel.Pool.OpenAi.Azure.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.SemanticKernel.Pool.OpenAi.Azure\Soenneker.SemanticKernel.Pool.OpenAi.Azure.csproj" />
     </ItemGroup>
 
     <ItemGroup>
