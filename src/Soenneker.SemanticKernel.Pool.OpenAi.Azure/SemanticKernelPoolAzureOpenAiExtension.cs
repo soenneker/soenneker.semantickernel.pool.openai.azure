@@ -68,6 +68,6 @@ public static class SemanticKernelPoolAzureOpenAiExtension
     public static async ValueTask RemoveAzureOpenAi(this ISemanticKernelPool pool, string poolId, string key, IHttpClientCache httpClientCache, CancellationToken cancellationToken = default)
     {
         await pool.Remove(poolId, key, cancellationToken).NoSync();
-        await httpClientCache.Remove($"azureopenai:{poolId}:{key}", cancellationToken).NoSync();
+        await httpClientCache.Remove($"azureopenai:{poolId}:{key}").NoSync();
     }
 }
