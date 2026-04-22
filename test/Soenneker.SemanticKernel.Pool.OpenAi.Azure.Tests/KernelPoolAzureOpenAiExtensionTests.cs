@@ -1,16 +1,15 @@
-﻿using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.SemanticKernel.Pool.OpenAi.Azure.Tests;
 
-[Collection("Collection")]
-public class KernelPoolAzureOpenAiExtensionTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public class KernelPoolAzureOpenAiExtensionTests : HostedUnitTest
 {
-    public KernelPoolAzureOpenAiExtensionTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public KernelPoolAzureOpenAiExtensionTests(Host host) : base(host)
     {
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
