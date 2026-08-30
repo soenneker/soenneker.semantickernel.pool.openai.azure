@@ -1,40 +1,65 @@
 [![](https://img.shields.io/nuget/v/soenneker.semantickernel.pool.openai.azure.svg?style=for-the-badge)](https://www.nuget.org/packages/soenneker.semantickernel.pool.openai.azure/)
 [![](https://img.shields.io/github/actions/workflow/status/soenneker/soenneker.semantickernel.pool.openai.azure/publish-package.yml?style=for-the-badge)](https://github.com/soenneker/soenneker.semantickernel.pool.openai.azure/actions/workflows/publish-package.yml)
-[![](https://img.shields.io/nuget/dt/soenneker.semantickernel.pool.openai.azure.svg?style=for-the-badge)](https://www.nuget.org/packages/soenneker.semantickernel.pool.openai.azure/)
+[![](https://img.shields.io/nuget/dt/soenneker.semantickernel.pool.openai.azure.svg?style=for-the-badge)](https://www.nuget.org/packages/soenneker/soenneker.semantickernel.pool.openai.azure/)
 [![](https://img.shields.io/github/actions/workflow/status/soenneker/soenneker.semantickernel.pool.openai.azure/codeql.yml?label=CodeQL&style=for-the-badge)](https://github.com/soenneker/soenneker.semantickernel.pool.openai.azure/actions/workflows/codeql.yml)
 
 # Soenneker.SemanticKernel.Pool.OpenAi.Azure
 
-Provides AzureOpenAI-specific registration extensions for KernelPoolManager, enabling integration with local LLMs via Semantic Kernel.
+Azure OpenAI connector registration helpers for `Soenneker.SemanticKernel.Pool`.
 
-## Install
+## Installation
 
 ```bash
 dotnet add package Soenneker.SemanticKernel.Pool.OpenAi.Azure
 ```
 
-## Quick start
+## Add an Azure OpenAI entry
+
+Resolve the pool and HTTP client cache from dependency injection, then register an Azure deployment:
 
 ```csharp
+using Soenneker.SemanticKernel.Enums.KernelType;
 using Soenneker.SemanticKernel.Pool.OpenAi.Azure;
 
-ISemanticKernelPool pool = /* obtain from your application */;
-await pool.AddAzureOpenAi("value", "value", /* supply type */ default!, "value", "value", "value", /* supply httpClientCache */ default!, 1, 1, 1, default);
+await pool.AddAzureOpenAi(
+    poolId: "chat",
+    key: "azure-primary",
+    type: KernelType.Chat,
+    modelId: "chat-deployment-name",
+    apiKey: configuration["AzureOpenAI:ApiKey"]!,
+    endpoint: configuration["AzureOpenAI:Endpoint"]!,
+    httpClientCache: httpClientCache,
+    rps: 2,
+    rpm: 60,
+    rpd: 1_000,
+    tokensPerDay: null,
+    cancellationToken);
 ```
 
-Registers an Azure OpenAI model in the kernel pool with the specified kernel type and optional rate/token limits.
+Despite the parameter name, `modelId` is passed to Semantic Kernel as the Azure deployment name.
 
-## What you get
+Supported types are:
 
-- `SemanticKernelPoolAzureOpenAiExtension` — Provides AzureOpenAI-specific registration extensions for KernelPoolManager, enabling integration with local LLMs via Semantic Kernel.
+- `KernelType.Chat` for chat completion
+- `KernelType.Image` for text-to-image
+- `KernelType.Embedding` for embedding generation
 
-## API at a glance
+Other types throw `NotSupportedException` when the pool first constructs the kernel.
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `SemanticKernelPoolAzureOpenAiExtension.AddAzureOpenAi(pool, poolId, key, type, modelId, apiKey, endpoint, httpClientCache, rps, rpm, rpd, tokensPerDay, cancellationToken)` | Registers an Azure OpenAI model in the kernel pool with the specified kernel type and optional rate/token limits. | A task that completes when the azure open ai addition is complete. |
-| `SemanticKernelPoolAzureOpenAiExtension.RemoveAzureOpenAi(pool, poolId, key, httpClientCache, cancellationToken)` | Unregisters an Azure OpenAI model from the kernel pool and removes associated HTTP client and kernel cache entries. | A task that completes when the azure open ai removal is complete. |
+Every connector receives the supplied Azure endpoint, API key, and a shared HTTP client cached under `azureopenai:{poolId}:{key}` with a five-minute timeout.
 
-## Practical notes
+Pool quota values are reservations made when `GetAvailable` selects the entry. `tokensPerDay` counts one unit per acquisition; it is not populated from Azure usage data.
 
-- Cancellation stops pending work; it does not undo work that has already completed.
+## Remove the entry
+
+Use the matching helper so both the pool entry and cached HTTP client are removed:
+
+```csharp
+await pool.RemoveAzureOpenAi(
+    "chat",
+    "azure-primary",
+    httpClientCache,
+    cancellationToken);
+```
+
+Keep the API key in a protected configuration provider and avoid logging or serializing the generated `SemanticKernelOptions`.
