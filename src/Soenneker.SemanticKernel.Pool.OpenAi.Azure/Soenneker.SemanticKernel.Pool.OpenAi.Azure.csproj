@@ -45,6 +45,6 @@
 
     <ItemGroup>
         <PackageReference Include="Soenneker.SemanticKernel.Pool" Version="4.0.395" />
-        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.2055" />
+        <PackageReference Include="Soenneker.Utils.HttpClientCache" Version="4.0.2058" />
     </ItemGroup>
 </Project>
